@@ -122,3 +122,12 @@
   roles:
     - { role: kubespray-defaults}
     - { role: kubernetes-apps, tags: apps }
+
+- hosts: downloads
+  any_errors_fatal: "{{ any_errors_fatal | default(true) }}"
+  vars: 
+    docker_bin_dir: "/usr/local/bin/"
+  roles:
+    - { role: kubespray-defaults }
+    - { role: download }
+

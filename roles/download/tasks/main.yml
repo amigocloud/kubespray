@@ -12,6 +12,17 @@
     - not skip_downloads|default(false)
     - item.value.enabled
 
+- name: "archive docker images"
+  command: "{{ docker_bin_dir }}/docker save -o {{ local_save_directory }}/{{ item.value.repo | replace('/', '_') }}:{{item.value.tag}}.tar {{item.value.repo}}:{{item.value.tag}}"
+  vars:
+    download: "{{ download_defaults | combine( item.value ) }}"
+  with_dict: "{{ downloads }}"
+  when: 
+    - archive_images
+    - not skip_downloads|default(false)
+    - item.value.enabled
+
+
 - name: "Sync container"
   include_tasks: sync_container.yml
   vars:

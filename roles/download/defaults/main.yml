@@ -1,6 +1,10 @@
 ---
 local_release_dir: /tmp/releases
 
+
+archive_images: True
+local_save_directory: "/tmp/docker_images/"
+
 # Used to only evaluate vars from download role
 skip_downloads: false
 
@@ -15,7 +19,7 @@ download_compress: 1
 # local caching of docker images or for Container Linux by CoreOS cluster nodes.
 # Otherwise, uses the first node in the kube-master group to store images
 # in the download_run_once mode.
-download_localhost: False
+download_localhost: True
 
 # Always pull images if set to True. Otherwise check by the repo's tag/digest.
 download_always_pull: False
