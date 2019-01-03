@@ -142,7 +142,7 @@
   ignore_errors: true
 
 - name: get available packages on Ubuntu
-  command: apt-cache madison docker-ce
+  command: apt-cache policy docker-ce
   when:
     - docker_task_result is failed
     - ansible_distribution == 'Ubuntu'
