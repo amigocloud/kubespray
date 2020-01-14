@@ -50,3 +50,24 @@
   roles:
     - { role: kubespray-defaults }
     - { role: remove-node/post-remove, tags: post-remove }
+
+- hosts: etcd
+  gather_facts: yes
+  order: sorted
+  roles:
+    - { role: kubespray-defaults }
+  tasks: 
+    - name: Remove etcd certs and keys for removed node
+      file:
+         path: "{{ etcd_cert_dir }}/{{item.prefix}}{{ node }}{{item.postfix}}"
+         state: absent
+      when:
+        - node in groups['etcd']
+      loop:
+        - { prefix: "admin-", postfix: ".pem" }
+        - { prefix: "admin-", postfix: "-key.pem" }
+        - { prefix: "member-", postfix: ".pem" }
+        - { prefix: "member-", postfix: "-key.pem" }
+        - { prefix: "node-", postfix: ".pem" }
+        - { prefix: "node-", postfix: "-key.pem" }
+
