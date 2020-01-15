@@ -2,7 +2,6 @@
 - hosts: localhost
   become: no
   gather_facts: no
-  order: sorted
   tasks:
     - name: "Check ansible version >=2.7.8"
       assert:
@@ -16,7 +15,6 @@
 
 - hosts: "{{ node | default('etcd:k8s-cluster:calico-rr') }}"
   gather_facts: no
-  order: sorted
   vars_prompt:
     name: "delete_nodes_confirmation"
     prompt: "Are you sure you want to delete nodes state? [For Node: {{node | default('All nodes in kube-node') }}] Type 'yes' to delete nodes."
@@ -31,14 +29,12 @@
 
 - hosts: kube-master
   gather_facts: no
-  order: sorted
   roles:
     - { role: kubespray-defaults }
     - { role: remove-node/pre-remove, tags: pre-remove }
 
 - hosts: "{{ node | default('kube-node') }}"
   gather_facts: yes
-  order: sorted
   roles:
     - { role: kubespray-defaults }
     - { role: reset, tags: reset, when: reset_nodes|default(True) }
@@ -46,14 +42,12 @@
 # Currently cannot remove first master or etcd
 - hosts: "{{ node | default('kube-master[1:]:etcd[:1]') }}"
   gather_facts: yes
-  order: sorted
   roles:
     - { role: kubespray-defaults }
     - { role: remove-node/post-remove, tags: post-remove }
 
 - hosts: etcd
   gather_facts: yes
-  order: sorted
   roles:
     - { role: kubespray-defaults }
   tasks: 
